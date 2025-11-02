@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# IDE stuff
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cache
+.cache/
+
+# Testing
+coverage/
+
+# Database backups
+backup_*.sql
+*.backup
+
+# Docker
+.dockerignore
+
+# Random stuff
+.tmp/
+temp/
+
+# Coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+
