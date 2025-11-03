@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { format, subDays, startOfMonth, endOfMonth } from 'date-fns';
-import { analyticsApi, metadataApi } from '../services/api';
+import { analyticsApi } from '../services/api';
 import MetricCard from '../components/MetricCard';
 import SalesChart from '../components/SalesChart';
 import TopProductsTable from '../components/TopProductsTable';
