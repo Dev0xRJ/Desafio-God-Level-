@@ -50,7 +50,8 @@ router.get('/top-products', async (req: Request, res: Response) => {
     const params = z.object({
       startDate: dateSchema,
       endDate: dateSchema,
-      limit: z.string().optional().transform((val: string) => {
+      limit: z.string().optional().transform((val: string | undefined) => {
+        if (!val) return 10;
         const num = parseInt(val);
         return isNaN(num) ? 10 : num;
       }),
@@ -75,7 +76,7 @@ router.get('/products-by-channel-time', async (req: Request, res: Response) => {
       dayOfWeek: z.string().transform((v: string) => parseInt(v)),
       startHour: z.string().transform((v: string) => parseInt(v)),
       endHour: z.string().transform((v: string) => parseInt(v)),
-      limit: z.string().optional().transform((v: string) => v ? parseInt(v) : 10),
+      limit: z.string().optional().transform((v: string | undefined) => v ? parseInt(v) : 10),
     }).parse(req.query);
 
     const data = await analyticsService.getProductsByChannelAndTime(
@@ -113,11 +114,13 @@ router.get('/delivery-performance', async (req: Request, res: Response) => {
 router.get('/inactive-customers', async (req: Request, res: Response) => {
   try {
     const params = z.object({
-      daysInactive: z.string().optional().transform((v: string) => {
+      daysInactive: z.string().optional().transform((v: string | undefined) => {
+        if (!v) return 30;
         const num = parseInt(v);
         return isNaN(num) ? 30 : num;
       }),
-      minPurchases: z.string().optional().transform((v: string) => {
+      minPurchases: z.string().optional().transform((v: string | undefined) => {
+        if (!v) return 3;
         const num = parseInt(v);
         return isNaN(num) ? 3 : num;
       }),

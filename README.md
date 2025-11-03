@@ -1,29 +1,28 @@
-# Analytics Pro - Dashboard para Restaurantes 📊
+# Dashboard Analytics para Restaurantes
 
-Bom, depois de algumas semanas trabalhando nisso aqui, consegui montar uma plataforma de analytics que resolve aqueles problemas chatos que todo dono de restaurante tem. Sabe quando você quer saber "qual produto vende mais na quinta à noite no iFood?" e não tem como descobrir fácil? Então, é isso que esse sistema resolve.
+Sistema de análise de dados para restaurantes com dashboards personalizáveis.
 
-## O que rola aqui
+## Sobre
 
-Basicamente, peguei o desafio de criar algo tipo Power BI mas específico pra restaurantes. A ideia veio depois de conversar com alguns donos de estabelecimento que sempre reclamavam da dificuldade de entender seus próprios dados.
+Plataforma que permite aos donos de restaurantes analisarem seus dados operacionais de múltiplos canais (presencial, iFood, Rappi, WhatsApp, app próprio).
 
-### O que consegue fazer
+### Funcionalidades
 
-- "Qual produto vende mais na quinta à noite no iFood?" ✓
-- "Meu tempo de entrega tá uma bosta. Em quais regiões?" ✓ 
-- "Quais clientes compraram várias vezes mas sumiram?" ✓
-- Comparar como cada loja tá se saindo
-- Ver padrões estranhos nos dados (tipo aquela queda de vendas inexplicável)
+- Dashboard com métricas principais
+- Análise de produtos por canal e horário
+- Performance de entrega por região
+- Identificação de clientes inativos
+- Comparação entre lojas e períodos
+- Query builder customizado
 
-## Como tá estruturado
+## Stack Tecnológica
 
-### Stack que usei
-
-- **Backend**: Node.js com TypeScript (escolhi porque já manjava e é rápido pra fazer API)
-- **Frontend**: React + TypeScript + Vite (Vite é muito mais rápido que o Create React App)
-- **CSS**: Tailwind (não gosto muito de CSS então facilita)
-- **Banco**: PostgreSQL (veio no desafio, mas é bom mesmo)
-- **Gráficos**: Recharts (testei alguns, esse funcionou bem)
-- **Cache**: Node-cache (simples mas funciona)
+- **Backend**: Node.js + TypeScript + Express
+- **Frontend**: React + TypeScript + Vite
+- **Estilização**: Tailwind CSS
+- **Banco de Dados**: PostgreSQL
+- **Gráficos**: Recharts
+- **Cache**: Node-cache
 
 ### Estrutura do Projeto
 

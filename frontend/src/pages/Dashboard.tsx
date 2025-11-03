@@ -13,7 +13,6 @@ export default function Dashboard() {
   const [startDate, setStartDate] = useState(format(startOfMonth(hoje), 'yyyy-MM-dd'));
   const [endDate, setEndDate] = useState(format(endOfMonth(hoje), 'yyyy-MM-dd'));
   
-  // TODO: tipar isso direito depois, por enquanto any tá funcionando
   const [metrics, setMetrics] = useState<any>(null);
   const [salesData, setSalesData] = useState<any[]>([]);
   const [topProducts, setTopProducts] = useState<any[]>([]);
@@ -28,7 +27,7 @@ export default function Dashboard() {
   const loadData = async () => {
     setLoading(true);
     try {
-      // carrega tudo junto pra ser mais rápido, espero que não dê problema com muitos dados
+      // carrega dados em paralelo
       const [metricsData, salesDataRes, topProductsRes, channelData] = await Promise.all([
         analyticsApi.getMetrics(startDate, endDate),
         analyticsApi.getSalesByPeriod(startDate, endDate, 'day'),
@@ -42,7 +41,6 @@ export default function Dashboard() {
       setSalesByChannel(channelData);
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
-      // TODO: colocar uma mensagem de erro decente aqui
     } finally {
       setLoading(false);
     }

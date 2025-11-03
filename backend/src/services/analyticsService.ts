@@ -9,13 +9,10 @@ export class AnalyticsService {
     this.queryBuilder = new QueryBuilder(pool);
   }
 
-  // TODO: talvez deveria usar hash aqui ao invés de JSON.stringify
-  // mas por enquanto tá funcionando...
   private getCacheKey(prefix: string, params: any): string {
     return `${prefix}:${JSON.stringify(params)}`;
   }
 
-  // pega as métricas principais - demora um pouco com muitos dados mas funciona
   async getSalesMetrics(startDate: string, endDate: string, filters?: any) {
     const cacheKey = this.getCacheKey('sales_metrics', { startDate, endDate, filters });
     const cached = getCache(cacheKey);
