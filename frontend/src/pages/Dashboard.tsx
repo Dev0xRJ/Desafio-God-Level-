@@ -21,7 +21,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate, endDate]);
 
   const loadData = async () => {
@@ -91,7 +90,7 @@ export default function Dashboard() {
     setEndDate(format(end, 'yyyy-MM-dd'));
   };
 
-  if (loading && !metrics) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-gray-500">Carregando dados...</div>
