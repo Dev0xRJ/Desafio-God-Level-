@@ -1,10 +1,10 @@
-# Dashboard Analytics para Restaurantes
+# Restaurant Analytics Dashboard
 
-Sistema de análise de dados para restaurantes com dashboards personalizáveis.
+Plataforma completa de analytics para restaurantes com dashboards interativos.
 
-## Sobre
+## Visão Geral
 
-Plataforma que permite aos donos de restaurantes analisarem seus dados operacionais de múltiplos canais (presencial, iFood, Rappi, WhatsApp, app próprio).
+Sistema que centraliza e analisa dados operacionais de múltiplos canais de venda (presencial, iFood, Rappi, WhatsApp, app próprio), oferecendo insights valiosos para tomada de decisão.
 
 ### Funcionalidades
 
@@ -220,10 +220,10 @@ Veja o arquivo [DECISOES_ARQUITETURAIS.md](./DECISOES_ARQUITETURAIS.md) para det
 
 MIT
 
-## Autor
+## Desenvolvedor
 
-**Raimundo Junior**  
-Desenvolvedor Full Stack
+**Raimundo Junior** - Full Stack Developer  
+Especialista em soluções de analytics e dashboards empresariais
 
 ## Arquitetura e Performance
 
