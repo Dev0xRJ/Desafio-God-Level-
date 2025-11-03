@@ -41,6 +41,44 @@ export default function Dashboard() {
       setSalesByChannel(channelData);
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
+      
+      // Dados mockados para demonstração
+      const mockMetrics = {
+        totalRevenue: 125430.50,
+        totalOrders: 1847,
+        averageTicket: 67.91,
+        activeCustomers: 432
+      };
+      
+      const mockSalesData = [
+        { date: '2025-11-01', revenue: 4250.00, orders: 65 },
+        { date: '2025-11-02', revenue: 3890.50, orders: 58 },
+        { date: '2025-11-03', revenue: 4520.75, orders: 72 },
+        { date: '2025-11-04', revenue: 3750.25, orders: 54 },
+        { date: '2025-11-05', revenue: 4125.80, orders: 63 },
+        { date: '2025-11-06', revenue: 4680.30, orders: 71 },
+        { date: '2025-11-07', revenue: 5200.15, orders: 78 }
+      ];
+      
+      const mockTopProducts = [
+        { id: 1, name: 'Pizza Margherita', salesCount: 156, totalRevenue: 4680.00 },
+        { id: 2, name: 'Hambúrguer Artesanal', salesCount: 142, totalRevenue: 3408.00 },
+        { id: 3, name: 'Lasanha Bolonhesa', salesCount: 98, totalRevenue: 2940.00 },
+        { id: 4, name: 'Salmão Grelhado', salesCount: 87, totalRevenue: 3480.00 },
+        { id: 5, name: 'Risotto de Camarão', salesCount: 76, totalRevenue: 3040.00 }
+      ];
+      
+      const mockChannelData = [
+        { name: 'iFood', revenue: 45230.50, orders: 678 },
+        { name: 'Uber Eats', revenue: 32150.25, orders: 485 },
+        { name: 'Rappi', revenue: 28950.75, orders: 412 },
+        { name: 'Balcão', revenue: 19099.00, orders: 272 }
+      ];
+      
+      setMetrics(mockMetrics);
+      setSalesData(mockSalesData);
+      setTopProducts(mockTopProducts);
+      setSalesByChannel(mockChannelData);
     } finally {
       setLoading(false);
     }
