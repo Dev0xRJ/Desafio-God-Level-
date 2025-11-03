@@ -23,7 +23,7 @@ interface ThemeProviderProps {
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   const [theme, setTheme] = useState<Theme>(() => {
-    // Verifica preferência salva ou preferência do sistema
+
     const saved = localStorage.getItem('theme') as Theme;
     if (saved) return saved;
     

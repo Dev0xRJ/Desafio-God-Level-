@@ -19,7 +19,7 @@ export default function DeliveryPerformanceTable({ data, loading }: DeliveryPerf
     return <div className="text-center py-8 text-gray-500">Nenhum dado de entrega encontrado para o período.</div>;
   }
 
-  // Ordenar por tempo médio de entrega (pior primeiro)
+
   const sortedData = [...data].sort((a, b) => b.avgDeliveryMinutes - a.avgDeliveryMinutes);
 
   return (

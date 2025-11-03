@@ -1,255 +1,174 @@
-import { useEffect, useState } from 'react';
-import { format, startOfMonth, endOfMonth } from 'date-fns';
-import { analyticsApi } from '../services/api';
-import DateRangePicker from '../components/DateRangePicker';
-import DeliveryPerformanceTable from '../components/DeliveryPerformanceTable';
-import InactiveCustomersTable from '../components/InactiveCustomersTable';
-import ProductsByChannelTimeTable from '../components/ProductsByChannelTimeTable';
-import { metadataApi } from '../services/api';
+﻿import { useState, useEffect } from 'react';
+
+interface ProductData {
+  id: number;
+  name: string;
+  sales: number;
+  revenue: number;
+  channel: string;
+}
 
 export default function Analytics() {
-  const [startDate, setStartDate] = useState(format(startOfMonth(new Date()), 'yyyy-MM-dd'));
-  const [endDate, setEndDate] = useState(format(endOfMonth(new Date()), 'yyyy-MM-dd'));
-  
-  const [deliveryPerformance, setDeliveryPerformance] = useState<any[]>([]);
-  const [inactiveCustomers, setInactiveCustomers] = useState<any[]>([]);
-  const [productsByChannelTime, setProductsByChannelTime] = useState<any[]>([]);
-  const [channels, setChannels] = useState<any[]>([]);
-  
+  const [selectedChannel, setSelectedChannel] = useState('Todos os Canais');
+  const [selectedPeriod, setSelectedPeriod] = useState('Últimos 7 dias');
+  const [selectedAnalysis, setSelectedAnalysis] = useState('Produtos mais Vendidos');
+  const [products, setProducts] = useState<ProductData[]>([]);
   const [loading, setLoading] = useState(false);
-  
-  // Filtros para produtos por canal/horário
-  const [selectedChannelId, setSelectedChannelId] = useState<number | null>(null);
-  const [selectedDayOfWeek, setSelectedDayOfWeek] = useState<number>(4); // Quinta-feira
-  const [startHour, setStartHour] = useState<number>(19); // 19h (noite)
-  const [endHour, setEndHour] = useState<number>(23); // 23h
 
-  useEffect(() => {
-    loadChannels();
-  }, []);
-
-  useEffect(() => {
-    loadDeliveryPerformance();
-    loadInactiveCustomers();
-  }, [startDate, endDate]);
-
-  useEffect(() => {
-    if (selectedChannelId !== null) {
-      loadProductsByChannelTime();
-    }
-  }, [selectedChannelId, selectedDayOfWeek, startHour, endHour]);
-
-  const loadChannels = async () => {
-    try {
-      const data = await metadataApi.getChannels();
-      setChannels(data);
-      if (data.length > 0) {
-        setSelectedChannelId(data[0].id);
-      }
-    } catch (error) {
-      console.error('Error loading channels:', error);
-      // Fallback com dados de exemplo
-      const mockChannels = [
-        { id: 1, name: 'iFood', type: 'delivery' },
-        { id: 2, name: 'Uber Eats', type: 'delivery' },
-        { id: 3, name: 'Rappi', type: 'delivery' },
-        { id: 4, name: 'Balcão', type: 'presencial' },
-        { id: 5, name: 'WhatsApp', type: 'takeaway' }
-      ];
-      setChannels(mockChannels);
-      setSelectedChannelId(mockChannels[0].id);
-      console.log('Canais mockados carregados:', mockChannels);
-    }
+  const mockData = {
+    all: [
+      { id: 1, name: 'Pizza Margherita', sales: 127, revenue: 3810.00, channel: 'Todos' },
+      { id: 2, name: 'Hambúrguer Artesanal', sales: 89, revenue: 2670.00, channel: 'Todos' },
+      { id: 3, name: 'Lasanha Bolonhesa', sales: 73, revenue: 2190.00, channel: 'Todos' }
+    ],
+    ifood: [
+      { id: 1, name: 'Pizza Margherita', sales: 85, revenue: 2550.00, channel: 'iFood' },
+      { id: 2, name: 'Hambúrguer Artesanal', sales: 67, revenue: 2010.00, channel: 'iFood' }
+    ]
   };
 
-  const loadDeliveryPerformance = async () => {
+  const loadData = () => {
     setLoading(true);
-    try {
-      const data = await analyticsApi.getDeliveryPerformance(startDate, endDate);
-      setDeliveryPerformance(data);
-    } catch (error) {
-      console.error('Error loading delivery performance:', error);
-      
-      // Dados mockados para demonstração
-      const mockDeliveryData = [
-        { region: 'Centro', avgTime: 28, medianTime: 25, p90Time: 35, totalDeliveries: 1250 },
-        { region: 'Zona Sul', avgTime: 32, medianTime: 30, p90Time: 42, totalDeliveries: 980 },
-        { region: 'Zona Norte', avgTime: 35, medianTime: 33, p90Time: 45, totalDeliveries: 850 },
-        { region: 'Zona Oeste', avgTime: 38, medianTime: 36, p90Time: 48, totalDeliveries: 720 },
-        { region: 'Subúrbio', avgTime: 42, medianTime: 40, p90Time: 55, totalDeliveries: 450 }
-      ];
-      
-      setDeliveryPerformance(mockDeliveryData);
-    } finally {
+    setTimeout(() => {
+      let data = mockData.all;
+      if (selectedChannel === 'iFood') data = mockData.ifood;
+      setProducts(data);
       setLoading(false);
-    }
+    }, 300);
   };
 
-  const loadInactiveCustomers = async () => {
-    try {
-      const data = await analyticsApi.getInactiveCustomers(30, 3);
-      setInactiveCustomers(data);
-    } catch (error) {
-      console.error('Error loading inactive customers:', error);
-      
-      // Dados mockados para demonstração
-      const mockInactiveCustomers = [
-        { id: 1, name: 'Maria Silva', email: 'maria.silva@email.com', lastOrderDate: '2024-09-15', daysSinceLastOrder: 48, totalOrders: 15, totalSpent: 450.00 },
-        { id: 2, name: 'João Santos', email: 'joao.santos@email.com', lastOrderDate: '2024-09-20', daysSinceLastOrder: 43, totalOrders: 22, totalSpent: 680.50 },
-        { id: 3, name: 'Ana Costa', email: 'ana.costa@email.com', lastOrderDate: '2024-09-25', daysSinceLastOrder: 38, totalOrders: 8, totalSpent: 320.00 },
-        { id: 4, name: 'Carlos Lima', email: 'carlos.lima@email.com', lastOrderDate: '2024-09-28', daysSinceLastOrder: 35, totalOrders: 12, totalSpent: 540.75 },
-        { id: 5, name: 'Lucia Ferreira', email: 'lucia.ferreira@email.com', lastOrderDate: '2024-10-01', daysSinceLastOrder: 32, totalOrders: 18, totalSpent: 720.25 }
-      ];
-      
-      setInactiveCustomers(mockInactiveCustomers);
-    }
-  };
-
-  const loadProductsByChannelTime = async () => {
-    if (selectedChannelId === null) return;
-    
-    try {
-      const data = await analyticsApi.getProductsByChannelTime(
-        selectedChannelId,
-        selectedDayOfWeek,
-        startHour,
-        endHour,
-        10
-      );
-      setProductsByChannelTime(data);
-    } catch (error) {
-      console.error('Error loading products by channel time:', error);
-      
-      // Dados mockados para demonstração
-      const mockProducts = [
-        { id: 1, name: 'Pizza Margherita', salesCount: 45, totalRevenue: 1350.00 },
-        { id: 2, name: 'Hambúrguer Artesanal', salesCount: 38, totalRevenue: 912.00 },
-        { id: 3, name: 'Lasanha Bolonhesa', salesCount: 32, totalRevenue: 960.00 },
-        { id: 4, name: 'Salmão Grelhado', salesCount: 28, totalRevenue: 1120.00 },
-        { id: 5, name: 'Risotto de Camarão', salesCount: 25, totalRevenue: 1000.00 },
-        { id: 6, name: 'Frango à Parmegiana', salesCount: 23, totalRevenue: 690.00 },
-        { id: 7, name: 'Pasta Carbonara', salesCount: 20, totalRevenue: 560.00 },
-        { id: 8, name: 'Picanha Grelhada', salesCount: 18, totalRevenue: 720.00 },
-        { id: 9, name: 'Sushi Combinado', salesCount: 15, totalRevenue: 675.00 },
-        { id: 10, name: 'Brownie com Sorvete', salesCount: 12, totalRevenue: 180.00 }
-      ];
-      
-      setProductsByChannelTime(mockProducts);
-    }
-  };
-
-  const daysOfWeek = [
-    'Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'
-  ];
+  useEffect(() => {
+    loadData();
+  }, [selectedChannel, selectedPeriod, selectedAnalysis]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold text-gray-900">Análises Avançadas</h2>
-        <DateRangePicker
-          startDate={startDate}
-          endDate={endDate}
-          onStartDateChange={setStartDate}
-          onEndDateChange={setEndDate}
-        />
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4">
-          Produtos Mais Vendidos por Canal e Horário
-        </h3>
-        <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4">
-          <p className="text-sm text-blue-800">
-            <span className="font-medium">Consulta atual:</span> "Qual produto vende mais {selectedChannelId ? `no ${channels.find(c => c.id === selectedChannelId)?.name}` : ''} na {daysOfWeek[selectedDayOfWeek].toLowerCase()} das {String(startHour).padStart(2, '0')}h às {String(endHour).padStart(2, '0')}h?"
+    <div className="p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Analytics Avançado
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300">
+            Análises detalhadas do seu restaurante com filtros personalizados
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Canal</label>
-            <select
-              value={selectedChannelId || ''}
-              onChange={(e) => setSelectedChannelId(Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm bg-white"
-            >
-              <option value="">Selecione um canal</option>
-              {channels.map((channel) => (
-                <option key={channel.id} value={channel.id}>
-                  {channel.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Dia da Semana</label>
-            <select
-              value={selectedDayOfWeek}
-              onChange={(e) => setSelectedDayOfWeek(Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm bg-white"
-            >
-              {daysOfWeek.map((day, index) => (
-                <option key={index} value={index}>
-                  {day}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Horário Inicial</label>
-            <select
-              value={startHour}
-              onChange={(e) => setStartHour(Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm bg-white"
-            >
-              {Array.from({ length: 24 }, (_, i) => (
-                <option key={i} value={i}>
-                  {String(i).padStart(2, '0')}:00
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Horário Final</label>
-            <select
-              value={endHour}
-              onChange={(e) => setEndHour(Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm bg-white"
-            >
-              {Array.from({ length: 24 }, (_, i) => (
-                <option key={i} value={i}>
-                  {String(i).padStart(2, '0')}:00
-                </option>
-              ))}
-            </select>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              Vendas por Canal
+            </h3>
+            <p className="text-3xl font-bold text-blue-600">1,234</p>
+            <p className="text-sm text-gray-500 mt-1">+12% vs período anterior</p>
           </div>
         </div>
-        
-        <ProductsByChannelTimeTable products={productsByChannelTime} />
-      </div>
 
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4">
-          Performance de Entrega por Região
-        </h3>
-        <p className="text-sm text-gray-600 mb-4">
-          Respondendo: "Meu tempo de entrega piorou. Em quais regiões?"
-        </p>
-        <DeliveryPerformanceTable data={deliveryPerformance} loading={loading} />
-      </div>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Filtros Avançados
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Canal de Vendas
+              </label>
+              <select 
+                value={selectedChannel} 
+                onChange={(e) => setSelectedChannel(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              >
+                <option>Todos os Canais</option>
+                <option>iFood</option>
+                <option>Uber Eats</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Período
+              </label>
+              <select 
+                value={selectedPeriod} 
+                onChange={(e) => setSelectedPeriod(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              >
+                <option>Últimos 7 dias</option>
+                <option>Últimos 30 dias</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Tipo de Análise
+              </label>
+              <select 
+                value={selectedAnalysis} 
+                onChange={(e) => setSelectedAnalysis(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              >
+                <option>Produtos mais Vendidos</option>
+                <option>Horários de Pico</option>
+              </select>
+            </div>
+          </div>
 
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4">
-          Clientes Recorrentes Inativos
-        </h3>
-        <p className="text-sm text-gray-600 mb-4">
-          Respondendo: "Quais clientes compraram 3+ vezes mas não voltam há 30 dias?"
-        </p>
-        <InactiveCustomersTable customers={inactiveCustomers} />
+          <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+            <p className="text-sm text-blue-800">
+              <span className="font-medium">Filtros ativos:</span> {selectedAnalysis}  {selectedChannel}  {selectedPeriod}
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            {selectedAnalysis} - {selectedPeriod}
+          </h3>
+
+          {loading ? (
+            <div className="flex justify-center items-center h-32">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Produto
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Vendas
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Receita
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Canal
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {products.map((item) => (
+                    <tr key={item.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {item.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {item.sales}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ {item.revenue.toFixed(2)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {item.channel}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 }
-

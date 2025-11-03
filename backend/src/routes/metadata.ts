@@ -4,7 +4,7 @@ import { getCache, setCache } from '../utils/cache';
 
 const router = express.Router();
 
-// Listar lojas
+
 router.get('/stores', async (req: Request, res: Response) => {
   try {
     const cached = getCache('metadata_stores');
@@ -18,14 +18,13 @@ router.get('/stores', async (req: Request, res: Response) => {
     `);
 
     const data = result.rows;
-    setCache('metadata_stores', data, 3600); // Cache por 1 hora
+    setCache('metadata_stores', data, 3600);
     res.json(data);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Listar canais
 router.get('/channels', async (req: Request, res: Response) => {
   try {
     const cached = getCache('metadata_channels');
@@ -45,7 +44,7 @@ router.get('/channels', async (req: Request, res: Response) => {
   }
 });
 
-// Listar produtos
+
 router.get('/products', async (req: Request, res: Response) => {
   try {
     const { limit, search } = req.query;
@@ -74,7 +73,7 @@ router.get('/products', async (req: Request, res: Response) => {
   }
 });
 
-// Listar categorias
+
 router.get('/categories', async (req: Request, res: Response) => {
   try {
     const cached = getCache('metadata_categories');
@@ -95,7 +94,7 @@ router.get('/categories', async (req: Request, res: Response) => {
   }
 });
 
-// Obter período de dados disponíveis
+
 router.get('/date-range', async (req: Request, res: Response) => {
   try {
     const cached = getCache('metadata_date_range');

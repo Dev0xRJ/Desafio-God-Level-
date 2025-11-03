@@ -69,7 +69,6 @@ export default function Layout({ children }: LayoutProps) {
             </div>
             
             <div className="flex items-center space-x-2">
-              {/* Theme toggle */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -79,7 +78,6 @@ export default function Layout({ children }: LayoutProps) {
                 {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </motion.button>
               
-              {/* Mobile menu button */}
               <div className="sm:hidden">
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -92,7 +90,6 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </div>
         
-        {/* Mobile menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div

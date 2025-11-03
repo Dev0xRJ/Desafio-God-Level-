@@ -5,10 +5,9 @@ import { z } from 'zod';
 const router = express.Router();
 const analyticsService = new AnalyticsService();
 
-// validação de data no formato YYYY-MM-DD
 const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 
-// GET /api/analytics/metrics - métricas gerais de vendas
+
 router.get('/metrics', async (req: Request, res: Response) => {
   try {
     const params = z.object({
@@ -23,7 +22,7 @@ router.get('/metrics', async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/analytics/sales-by-period - vendas agrupadas por período
+
 router.get('/sales-by-period', async (req: Request, res: Response) => {
   try {
     const params = z.object({
@@ -44,7 +43,7 @@ router.get('/sales-by-period', async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/analytics/top-products - lista produtos mais vendidos
+
 router.get('/top-products', async (req: Request, res: Response) => {
   try {
     const params = z.object({
@@ -68,7 +67,7 @@ router.get('/top-products', async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/analytics/products-by-channel-time - produtos por canal, dia e horário
+
 router.get('/products-by-channel-time', async (req: Request, res: Response) => {
   try {
     const params = z.object({
@@ -92,7 +91,7 @@ router.get('/products-by-channel-time', async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/analytics/delivery-performance - performance de entrega por região
+
 router.get('/delivery-performance', async (req: Request, res: Response) => {
   try {
     const params = z.object({
@@ -110,7 +109,7 @@ router.get('/delivery-performance', async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/analytics/inactive-customers - clientes recorrentes que estão inativos
+
 router.get('/inactive-customers', async (req: Request, res: Response) => {
   try {
     const params = z.object({
@@ -136,7 +135,7 @@ router.get('/inactive-customers', async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/analytics/sales-by-channel - vendas agrupadas por canal
+
 router.get('/sales-by-channel', async (req: Request, res: Response) => {
   try {
     const params = z.object({
@@ -151,7 +150,7 @@ router.get('/sales-by-channel', async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/analytics/sales-by-store - vendas agrupadas por loja
+
 router.get('/sales-by-store', async (req: Request, res: Response) => {
   try {
     const params = z.object({
@@ -166,7 +165,7 @@ router.get('/sales-by-store', async (req: Request, res: Response) => {
   }
 });
 
-// POST /api/analytics/custom-query - executa query customizada
+
 router.post('/custom-query', async (req: Request, res: Response) => {
   try {
     const config = req.body;

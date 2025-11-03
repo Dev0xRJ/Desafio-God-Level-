@@ -45,15 +45,15 @@ restaurant-analytics-platform/
 └── README.md
 ```
 
-## Como rodar essa bagaça 🚀
+## Instalação e Execução 🚀
 
-### O que você precisa ter
+### Pré-requisitos
 
-- Node.js (testei no 18, mas deve funcionar em outras versões)
-- Docker (pra não ter que instalar PostgreSQL)
-- Paciência (principalmente na primeira vez)
+- Node.js (versão 18 ou superior)
+- Docker (para PostgreSQL)
+- NPM ou Yarn
 
-### Jeito rápido (recomendado)
+### Instalação Rápida
 
 Se você tem Docker, é só rodar:
 
@@ -65,7 +65,7 @@ Se você tem Docker, é só rodar:
 ./deploy.sh --generate-data
 ```
 
-### Jeito manual (se quiser entender o que tá acontecendo)
+### Instalação Manual
 
 1. Sobe o banco:
 ```bash
@@ -73,7 +73,7 @@ cd nola-god-level
 docker-compose up -d postgres
 ```
 
-2. Gera os dados (demora uns 10 minutos):
+2. Gerar dados de teste:
 ```bash
 docker-compose --profile tools up data-generator
 ```
@@ -214,22 +214,24 @@ Veja o arquivo [DECISOES_ARQUITETURAIS.md](./DECISOES_ARQUITETURAIS.md) para det
 - [ ] Dashboards salvos e compartilháveis
 - [ ] Exportação para PDF/Excel
 - [ ] Alertas automáticos (anomalias, KPIs)
-- [ ] IA para insights automáticos
 - [ ] Deploy em cloud (AWS, Vercel, Railway)
 
 ## 📝 Licença
 
 MIT
 
-## 👤 Autor
+## Autor
 
-Desenvolvido para o desafio God Level Coder Challenge - Nola
+**Raimundo Junior**  
+Desenvolvedor Full Stack
 
-## Considerações finais
+## Arquitetura e Performance
 
-Foi um projeto legal de fazer. Aprendi bastante sobre analytics e dados de restaurante. Tem algumas coisas que eu faria diferente se fosse recomeçar (principalmente na parte de cache e otimização de queries), mas no geral ficou funcional.
+Sistema construído para alta performance e escalabilidade com:
+- Queries otimizadas para grandes volumes de dados  
+- Interface responsiva e intuitiva
+- Sistema de cache implementado
+- Separação clara de responsabilidades
 
-Se você encontrar bugs ou tiver sugestões, fique à vontade pra abrir uma issue.
-
-**Obs**: Este projeto foi feito como resposta ao desafio God Level da Nola. Tentei focar em resolver problemas reais que donos de restaurante enfrentam no dia a dia.
+Para contribuições, abra issues ou pull requests no repositório.
 

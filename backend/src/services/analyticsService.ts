@@ -48,7 +48,6 @@ export class AnalyticsService {
     return data;
   }
 
-  // essa função meio que quebra os dados por período pra fazer os gráficos
   async getSalesByPeriod(startDate: string, endDate: string, period: 'day' | 'week' | 'month', filters?: any) {
     const cacheKey = this.getCacheKey('sales_by_period', { startDate, endDate, period, filters });
     const cached = getCache(cacheKey);
@@ -56,7 +55,6 @@ export class AnalyticsService {
       return cached;
     }
 
-    // mapeia período para função DATE_TRUNC do postgres
     let dateTrunc = 'day';
     if (period === 'week') {
       dateTrunc = 'week';
@@ -91,15 +89,12 @@ export class AnalyticsService {
     return data;
   }
 
-  // lista os produtos mais vendidos no período
   async getTopProducts(startDate: string, endDate: string, limit: number = 10, filters?: any) {
     const cacheKey = this.getCacheKey('top_products', { startDate, endDate, limit, filters });
     const cached = getCache(cacheKey);
     if (cached) {
       return cached;
     }
-
-    // query direta aqui é mais simples que usar o query builder
     const result = await pool.query(`
       SELECT 
         p.id,
@@ -132,11 +127,9 @@ export class AnalyticsService {
     return data;
   }
 
-  // produtos mais vendidos em um canal específico, dia da semana e horário
-  // usado para responder: "qual produto vende mais na quinta à noite no ifood?"
   async getProductsByChannelAndTime(
     channelId: number,
-    dayOfWeek: number, // 0 = domingo, 1 = segunda, etc
+    dayOfWeek: number,
     startHour: number,
     endHour: number,
     limit: number = 10
@@ -177,8 +170,6 @@ export class AnalyticsService {
     return data;
   }
 
-  // análise de performance de entrega agrupada por bairro/cidade
-  // inclui média, mediana e p90 do tempo de entrega
   async getDeliveryPerformanceByRegion(startDate: string, endDate: string) {
     const cacheKey = this.getCacheKey('delivery_performance', { startDate, endDate });
     const cached = getCache(cacheKey);
@@ -218,8 +209,7 @@ export class AnalyticsService {
     return data;
   }
 
-  // encontra clientes que compraram várias vezes mas estão inativos
-  // útil para campanhas de reativação
+
   async getInactiveRecurrentCustomers(daysInactive: number = 30, minPurchases: number = 3) {
     const cacheKey = this.getCacheKey('inactive_customers', { daysInactive, minPurchases });
     const cached = getCache(cacheKey);
@@ -265,7 +255,7 @@ export class AnalyticsService {
     return data;
   }
 
-  // agrupa vendas por canal (ifood, rappi, presencial, etc)
+
   async getSalesByChannel(startDate: string, endDate: string) {
     const cacheKey = this.getCacheKey('sales_by_channel', { startDate, endDate });
     const cached = getCache(cacheKey);
@@ -301,7 +291,7 @@ export class AnalyticsService {
     return data;
   }
 
-  // vendas agrupadas por loja
+
   async getSalesByStore(startDate: string, endDate: string) {
     const cacheKey = this.getCacheKey('sales_by_store', { startDate, endDate });
     const cached = getCache(cacheKey);
@@ -339,8 +329,7 @@ export class AnalyticsService {
     return data;
   }
 
-  // executa uma query customizada usando o query builder
-  // permite criar análises flexíveis sem escrever SQL direto
+
   async executeCustomQuery(config: QueryConfig) {
     return this.queryBuilder.execute(config);
   }
